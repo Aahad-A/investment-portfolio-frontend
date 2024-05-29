@@ -3,9 +3,10 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import Drafts from './Drafts';
 // import CardDisplay from './CardDisplay';
-import Navigation from './Navigation';
+import Navigation from './components/Navigation.js';
 import Login from './Login';
 import LandingPage from './LandingPage';
+import UserPortfolios from './userPortfolio.js';
 // import NewItem from './NewItem';
 
 
@@ -17,7 +18,7 @@ function App() {
         {/* <Route path="/" element={<CardDisplay/>} /> */}
         <Route path="/" element={<LandingPage/>} />
         <Route path="/login" element={<Login/>} />
-        {/* <Route path="/newItem" element={<NewItem/>} /> */}
+        <Route path="/portfolios" element={<UserPortfolios/>} />
       </Routes>
     </Router>
   );

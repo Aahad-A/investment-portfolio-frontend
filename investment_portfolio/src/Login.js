@@ -1,4 +1,4 @@
-import logo from './hero.jpg';
+import hero from './hero.jpg';
 import './Login.css';
 import {Form, Button, FormGroup} from "react-bootstrap";
 import Cookies from 'js-cookie';
@@ -64,42 +64,68 @@ function NewUser(e){
 
 function Login() {
   return (
-    <div className="hero">
-        <img src={logo} alt="Hero Image" />
-        <div className="hero-content">
-            <h1>Login</h1>.
-            <Form onSubmit={(e) =>{
-                e.preventDefault();
-                Authenticate(e);
-                e.target.reset();
-            }}>
-                <FormGroup className='mb-3'>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" name="username" required/>
-
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name="password" required/>
-                </FormGroup>
-                <Button variant='primary' type="submit" className="w-100">Login</Button>
-            </Form>
-            <br/>
-            <h1>New User</h1>.
-            <Form onSubmit={(e) =>{
-                e.preventDefault();
-                NewUser(e);
-                e.target.reset();
-            }}>
-                <FormGroup className='mb-3'>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" name="new_username" required/>
-
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name="new_password" required/>
-                </FormGroup>
-                <Button variant='primary' type="submit" className="w-100">Create User</Button>
-            </Form>
+    <div className="hero" style={{ backgroundImage: `url(${hero})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="container">
+        <div className="row justify-content-center mb-4">
+          <div className="col-md-6 text-center text-white">
+            <h1>Welcome to Investment Portfolio Manager</h1>
+          </div>
         </div>
-
+        <div className="row justify-content-center">
+          <div className="col-md-3">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h2 className="text-center mb-4">Login</h2>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    Authenticate(e);
+                    e.target.reset();
+                  }}
+                >
+                  <FormGroup className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" name="username" required />
+                  </FormGroup>
+                  <FormGroup className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" name="password" required />
+                  </FormGroup>
+                  <Button variant="primary" type="submit" className="w-100">
+                    Login
+                  </Button>
+                </Form>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h2 className="text-center mb-4">New User</h2>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    NewUser(e);
+                    e.target.reset();
+                  }}
+                >
+                  <FormGroup className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" name="new_username" required />
+                  </FormGroup>
+                  <FormGroup className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" name="new_password" required />
+                  </FormGroup>
+                  <Button variant="primary" type="submit" className="w-100">
+                    Create User
+                  </Button>
+                </Form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
