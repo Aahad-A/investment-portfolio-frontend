@@ -9,19 +9,28 @@ function Navigation() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto" variant="pills">
+
             <Nav.Item>
               <Nav.Link as={NavLink} to="/" exact>
                 Home
               </Nav.Link>
             </Nav.Item>
+
             <Nav.Item>
               <Nav.Link as={NavLink} to="/login">
                 Login
               </Nav.Link>
             </Nav.Item>
+            
             <Nav.Item>
               <Nav.Link as={NavLink} to="/portfolios">
                 Portfolios
+              </Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link as={NavLink} to="/stocks">
+                Current Stock Data
               </Nav.Link>
             </Nav.Item>
           </Nav>

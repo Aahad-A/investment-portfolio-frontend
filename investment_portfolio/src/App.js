@@ -7,6 +7,7 @@ import Navigation from './components/Navigation.js';
 import Login from './Login';
 import LandingPage from './LandingPage';
 import UserPortfolios from './userPortfolio.js';
+import StockData from './StockData.js';
 // import NewItem from './NewItem';
 
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<LandingPage/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/portfolios" element={<UserPortfolios/>} />
+        <Route path="/stocks" element={<StockData/>} />
       </Routes>
     </Router>
   );
