@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import { Line } from "react-chartjs-2";
@@ -10,6 +10,8 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import CreatePortfolioForm from "./components/CreatePorfolio";
+import AddInvestmentForm from "./components/AddInvestment";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
@@ -40,6 +42,8 @@ const graphData = {
   },
 };
 
+
+
 const UserPortfolios = ({ userId }) => {
   const [portfolios, setPortfolios] = useState([]);
   const [selectedInvestment, setSelectedInvestment] = useState(null);
@@ -52,10 +56,38 @@ const UserPortfolios = ({ userId }) => {
   const [newInvestmentQuantity, setNewInvestmentQuantity] = useState("");
   const [newInvestmentPurchasePrice, setNewInvestmentPurchasePrice] =
     useState("");
-  const [handleCreatePortfolioAndInvestment] = useState("");
+  const [selectedPortfolio, setSelectedPortfolio] = useState("");
+  const [showCreatePortfolioModal, setShowCreatePortfolioModal] =
+    useState(false);
+  const [showAddInvestmentModal, setShowAddInvestmentModal] = useState(false);
+  const handleCloseCreatePortfolioModal = () =>
+    setShowCreatePortfolioModal(false);
+  const handleShowCreatePortfolioModal = () =>
+    setShowCreatePortfolioModal(true);
+  const handleCloseAddInvestmentModal = () => setShowAddInvestmentModal(false);
+  const handleShowAddInvestmentModal = () => setShowAddInvestmentModal(true);
+  const handleCloseManageInvestmentModal = () => setSelectedInvestment(null);
 
   const handleViewGraph = (ticker) => {
     setSelectedGraphData(graphData[ticker]);
+  };
+
+  const deletePortfolio = async (portfolioId) => {
+    console.log(portfolioId)
+    try {
+      const response = await fetch(`http://127.0.0.1:5196/portfolios/${portfolioId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      // Refresh the page or update the state to remove the deleted portfolio
+      window.location.reload();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   useEffect(() => {
@@ -125,171 +157,207 @@ const UserPortfolios = ({ userId }) => {
         setPrice("");
       });
   };
+
   const handleCreatePortfolio = () => {
-    fetch('http://127.0.0.1:5196/portfolios', {
-      method: 'POST',
+    fetch("http://127.0.0.1:5196/portfolios", {
+      method: "POST",
       headers: {
-       'Content-Type': 'application/json',
-        "Authorization": "Basic " + Cookies.get('base64')
+        "Content-Type": "application/json",
+        Authorization: "Basic " + Cookies.get("base64"),
       },
       body: JSON.stringify({ name: newPortfolioName }),
     })
-      .then(response => response.json())
-      .then(data => {
-        setPortfolios(prevPortfolios => [...prevPortfolios, data]);
-        setNewPortfolioName('');
+      .then((response) => response.json())
+      .then((data) => {
+        setPortfolios((prevPortfolios) =>
+          prevPortfolios ? [...prevPortfolios, data] : [data]
+        );
+        setNewPortfolioName("");
       })
-      .catch(error => console.error('Error:', error));
+      .catch((error) => console.error("Error:", error));
   };
-  
+
   const handleAddInvestment = (portfolioId, newInvestment) => {
-    fetch('http://127.0.0.1:5196/investments', {
-      method: 'POST',
+    console.log("portfolioId:", portfolioId);
+    console.log("newInvestment:", newInvestment);
+
+    fetch("http://127.0.0.1:5196/investments", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Basic " + Cookies.get('base64')
+        "Content-Type": "application/json",
+        Authorization: "Basic " + Cookies.get("base64"),
       },
       body: JSON.stringify({ ...newInvestment, portfolioId }),
     })
-      .then(response => response.json())
-      .then(data => {
-        setPortfolios(prevPortfolios => prevPortfolios.map(portfolio => {
-          if (portfolio.portfolioId === portfolioId) {
-            return { ...portfolio, investments: [...portfolio.investments, data] };
-          } else {
-            return portfolio;
-          }
-        }));
+      .then((response) => response.json())
+      .then((data) => {
+        setPortfolios((prevPortfolios) =>
+          prevPortfolios.map((portfolio) => {
+            if (portfolio.portfolioId === portfolioId) {
+              return {
+                ...portfolio,
+                investments: [...portfolio.investments, data],
+              };
+            } else {
+              return portfolio;
+            }
+          })
+        );
+        // Clear the form
+        setNewInvestmentName("");
+        setNewInvestmentTicker("");
+        setNewInvestmentQuantity("");
+        setNewInvestmentPurchasePrice("");
       })
-      .catch(error => console.error('Error:', error));
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
     <Container>
+      <div className="d-flex justify-content-between mb-5">
+      <Button variant="primary" onClick={handleShowCreatePortfolioModal}style={{ paddingLeft: '10px' }}>
+        {" "}
+        Create Portfolio
+      </Button>
+      
+      <Button variant="primary" onClick={handleShowAddInvestmentModal}style={{ paddingLeft: '10px' }}>
+        {" "}
+        Add Investment to Portfolio
+      </Button>
+      </div>
+
       <Row>
-        {portfolios.map((portfolio) => (
-          <Col key={portfolio.portfolioId} md={6} className="mb-4">
-            <Card>
-              <Card.Body>
-                <Card.Title>{portfolio.name}</Card.Title>
-                <Card.Text>
-                  <strong>Investments:</strong>
-                  <ul>
-                    {portfolio.investments.map((investment) => (
-                      <li key={investment.investmentId}>
-                        {investment.name} ({investment.ticker}):{" "}
-                        {investment.quantity} shares @ $
-                        {investment.purchasePrice} each
-                        <Button
-                          variant="link"
-                          onClick={() => setSelectedInvestment(investment)}
-                        >
-                          Manage
-                        </Button>
-                        <Button
-                          variant="link"
-                          onClick={() => handleViewGraph(investment.ticker)}
-                        >
-                          View Graph
-                        </Button>
-                      </li>
-                    ))}
-                  </ul>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+        {portfolios &&
+          portfolios.map((portfolio) => (
+            <Col key={portfolio.portfolioId} md={6} className="mb-4">
+              <Card>
+                <Card.Body>
+                  <Card.Title>{portfolio.name}
+                
+                  <Button variant="danger" onClick={() => deletePortfolio(portfolio.portfolioId)} style={{ marginLeft: '10px' }}>
+                  Delete Portfolio
+                 </Button>
+              
+                  </Card.Title>
+                  <Card.Text>
+                    <strong>Investments:</strong>
+                    <ul>
+                      {portfolio.investments &&
+                        portfolio.investments.map((investment) => (
+                          <li key={investment.investmentId}>
+                            {investment.name} ({investment.ticker}):{" "}
+                            {investment.quantity} shares @ $
+                            {investment.purchasePrice} each
+                            <Button
+                              variant="link"
+                              onClick={() => setSelectedInvestment(investment)}
+                            >
+                              Manage
+                            </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleViewGraph(investment.ticker)}
+                            >
+                              View Graph
+                            </Button>
+                          </li>
+                        ))}
+                    </ul>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
       </Row>
-      <Row>
-        <Col md={6} className="mb-4">
-          <Card>
-            <Card.Body>
-              <Card.Title>Create New Portfolio</Card.Title>
-              <Form>
-                <Form.Group controlId="portfolioName">
-                  <Form.Label>Portfolio Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={newPortfolioName}
-                    onChange={e => setNewPortfolioName(e.target.value)}
-                  />
-                </Form.Group>
-                <Button variant="primary" onClick={handleCreatePortfolio}>
-                  Create Portfolio
-                </Button>
-              </Form>
-              <hr />
-              <Card.Title>Add New Investment</Card.Title>
-              <Form>
-                <Form.Group controlId="investmentName">
-                  <Form.Label>Investment Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={newInvestmentName}
-                    onChange={e => setNewInvestmentName(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group controlId="investmentTicker">
-                  <Form.Label>Investment Ticker</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={newInvestmentTicker}
-                    onChange={e => setNewInvestmentTicker(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group controlId="investmentQuantity">
-                  <Form.Label>Investment Quantity</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={newInvestmentQuantity}
-                    onChange={e => setNewInvestmentQuantity(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group controlId="investmentPurchasePrice">
-                  <Form.Label>Investment Purchase Price</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={newInvestmentPurchasePrice}
-                    onChange={e => setNewInvestmentPurchasePrice(e.target.value)}
-                  />
-                </Form.Group>
-                <Button variant="primary" onClick={() => handleAddInvestment(newPortfolioName, {
-                  name: newInvestmentName,
-                  ticker: newInvestmentTicker,
-                  quantity: newInvestmentQuantity,
-                  purchasePrice: newInvestmentPurchasePrice
-                })}>
-                  Add Investment
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      <Modal
+        show={showCreatePortfolioModal}
+        onHide={handleCloseCreatePortfolioModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Portfolio</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CreatePortfolioForm
+            newPortfolioName={newPortfolioName}
+            setNewPortfolioName={setNewPortfolioName}
+            handleCreatePortfolio={handleCreatePortfolio}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showAddInvestmentModal}
+        onHide={handleCloseAddInvestmentModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Investment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddInvestmentForm
+            portfolios={portfolios}
+            selectedPortfolio={selectedPortfolio}
+            setSelectedPortfolio={setSelectedPortfolio}
+            newInvestmentName={newInvestmentName}
+            setNewInvestmentName={setNewInvestmentName}
+            newInvestmentTicker={newInvestmentTicker}
+            setNewInvestmentTicker={setNewInvestmentTicker}
+            newInvestmentQuantity={newInvestmentQuantity}
+            setNewInvestmentQuantity={setNewInvestmentQuantity}
+            newInvestmentPurchasePrice={newInvestmentPurchasePrice}
+            setNewInvestmentPurchasePrice={setNewInvestmentPurchasePrice}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAddInvestmentModal}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() =>
+              handleAddInvestment(selectedPortfolio, {
+                name: newInvestmentName,
+                ticker: newInvestmentTicker,
+                quantity: newInvestmentQuantity,
+                purchasePrice: newInvestmentPurchasePrice,
+              })
+            }
+          >
+            Add Investment
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {selectedInvestment && (
-        <div className="mt-4">
-          <h3>
-            Manage Investment: {selectedInvestment.name} (
-            {selectedInvestment.ticker})
-          </h3>
-          <Form>
-            <Form.Group controlId="quantity">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="price">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </Form.Group>
+        <Modal
+          show={selectedInvestment !== null}
+          onHide={handleCloseManageInvestmentModal}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Manage Investment: {selectedInvestment.name} (
+              {selectedInvestment.ticker})
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="quantity">
+                <Form.Label>Quantity</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group controlId="price">
+                <Form.Label>Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
             <Button
               variant="primary"
               onClick={() => handlePurchase(selectedInvestment.investmentId)}
@@ -302,8 +370,8 @@ const UserPortfolios = ({ userId }) => {
             >
               Sell
             </Button>
-          </Form>
-        </div>
+          </Modal.Footer>
+        </Modal>
       )}
       {selectedGraphData && (
         <div className="mt-4">

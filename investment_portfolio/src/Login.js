@@ -1,4 +1,4 @@
-import hero from './hero.jpg';
+import hero from './images/hero.jpg';
 import './Login.css';
 import {Form, Button, FormGroup} from "react-bootstrap";
 import Cookies from 'js-cookie';
@@ -25,9 +25,13 @@ function Authenticate(e)
     )
     .then(response => {
             if (response.ok) { // Check if response went through
+                alert('Login successful!');
                 return response.text();
+                
             } else {
+                
                 throw new Error('Network response was not ok.');
+                
             }
         })
     .then(data => { 
@@ -37,6 +41,7 @@ function Authenticate(e)
             Cookies.set('base64', btoa(dataObj.username+":"+dataObj.password), { expires: 7 });
         })
     .catch(error => {
+        alert('login failed!')
         console.log('There has been a problem with your fetch operation: ', error.message);
         })
 }
@@ -58,6 +63,7 @@ function NewUser(e){
         })
         .then(response => response.text())
         .then(data => { 
+            alert('Account Creation Successful!');
             console.log(data);
     })
 }

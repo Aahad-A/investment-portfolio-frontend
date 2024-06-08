@@ -8,6 +8,7 @@ import Login from './Login';
 import LandingPage from './LandingPage';
 import UserPortfolios from './userPortfolio.js';
 import StockData from './StockData.js';
+import Footer from './components/Footer.js';
 // import NewItem from './NewItem';
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/portfolios" element={<UserPortfolios/>} />
         <Route path="/stocks" element={<StockData/>} />
       </Routes>
+      <Footer/>
     </Router>
   );
 }

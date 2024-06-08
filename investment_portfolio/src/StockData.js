@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 const StockData = () => {
-  const [stockSymbol, setStockSymbol] = useState('AAPL');
+  const [stockSymbol, setStockSymbol] = useState('');
   const [latestPrice, setLatestPrice] = useState(null);
   const [historicalData, setHistoricalData] = useState(null);
 

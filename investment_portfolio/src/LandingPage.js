@@ -1,10 +1,10 @@
-import logo from './logo.svg';
+import logo from './images/dollarsign.png';
 import './App.css';
 
 function LandingPage() {
   return (
     <div className="App">
-      <header className="App-header bg-primary text-white py-5">
+      <header className="App-header text-black py-5">
         <img src={logo} className="App-logo mb-3" alt="logo" />
         <h1>Welcome to the Investment Portfolio Manager</h1>
         <p>
@@ -36,7 +36,7 @@ function LandingPage() {
               <div className="card-body">
                 <h5 className="card-title">Real-Time Data</h5>
                 <p className="card-text">
-                  Integrate with financial data APIs to fetch the latest stock and investment information.
+                  Integrate with financial data APIs (Alphavantage) to fetch the latest stock and investment information.
                 </p>
               </div>
             </div>
@@ -46,19 +46,13 @@ function LandingPage() {
               <div className="card-body">
                 <h5 className="card-title">Secure & Reliable</h5>
                 <p className="card-text">
-                  Enjoy secure login and data management with OAuth 2.0, ensuring your data is safe.
+                  Enjoy secure login and data management with HTTP Basic, ensuring your data is safe.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      <footer className="bg-light py-4">
-        <div className="container">
-          <span className="text-muted">&copy; Aahad Abubaker</span>
-        </div>
-      </footer>
     </div>
   );
 }
