@@ -1,39 +1,36 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6w5qaeE1)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-7f7980b617ed060a017424585567c406b6ee15c891e84e1186181d67ecf80aa0.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=15160687)
-# FinalProject-FE
-The React, Front end repository
+# Investment Portfolio
 
-## Requirements
-Choose a project that fulfills the following requirements:
+This project is an Investment Portfolio website consisting of a frontend built using React and Bootstrap, and a backend built using .NET WebAPI, Swagger, and Entity Framework. The application allows users to create accounts, log in with basic authentication, manage their investment portfolios, view graphs of current stock prices, and perform buy and sell operations for stocks.
 
-	1. Front end must be a react application
-	2. Back end must be a dotnet application
-		a. Must include GET, POST and PUT api calls
-	3. Must have data persistence to a database.  This can be a SQL lite database, MS SQL, MySQL, Mongo, etc.  You can use multiple databases if you'd like. 
-	4. The Entity Framework must handle all communication between the dotnet application and the database
-	5. Your application must have a login page with support of Oauth2.0 Authentication and handle multiple users.
-		a. It should have a workflow for creating a new account
-		b. Authenticating against that new account
-		c. Being able to login with that new account
-	6. Must have multiple pages and/or views
-	7. Project demo will be live during week 10 or by video and submitted via D2L
-		a. Submission will require a document or PowerPoint presentation describing your project
-			i. Describe each of the above requirements and how your project meets them
-			ii. Why did you choose this specific project
-			iii. If you had more time, what would you do differently
-		b. Project  source code must be committed to GitHub.  If you submit a presentation but do not commit source code then you will receive a 0%.  
+## Summary of the Project
 
+### Frontend
 
-## Example projects:
-	• Blogging Platform
-	• Bank / ATM application
-	• Personalized Weather Application
-	• Chat application
-	• Gradebook supporting multiple students
-	• Reservation system (restaurants, equipment, cars, etc.)
-	• Shopping application (limit the scope)
-	• Finance app (Display stocks, Crypto etc.)
-	• Crime alert by location/user
-	• Book Review site
-	• Resale of used items (aka Craigslist )
-![image](https://github.com/bodonnell-DePaul/FinalProject-BE/assets/5862378/31482d6c-92fd-4dd1-af96-1232d4debd67)
+- **User Authentication**: Users can create accounts and log in with basic authentication.
+- **Financial Data Retrieval**: Fetches and displays financial data from AlphaVantage.
+- **Responsive Design**: Utilizes Bootstrap for responsive UI components.
+- **Stock Information**: View graphs of current stock prices.
+- **Portfolio Management**: Add stocks to each portfolio, including buy and sell operations.
+
+### Backend
+
+- **.NET WebAPI**: Provides the API endpoints for the frontend.
+- **Swagger**: Used for API documentation and testing.
+- **Entity Framework**: Manages database interactions.
+- **Authentication**: Uses basic authentication and cookies to save account login details.
+
+## How to Run the Project
+
+### Frontend
+
+1. **Clone the repository**:
+   ```sh
+   git clone https://github.com/yourusername/investment-portfolio-frontend.git
+   cd investment-portfolio-frontend/investment_portfolio
+   ```
+2. **Install dependencies and Run the app**:
+   ```sh
+   npm install
+   npm start
+   ```
+3. This will start the application at http://localhost:3000.
