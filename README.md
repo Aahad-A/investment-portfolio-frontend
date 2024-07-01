@@ -2,6 +2,8 @@
 
 This project is an Investment Portfolio website consisting of a frontend built using React and Bootstrap, and a backend built using .NET WebAPI, Swagger, and Entity Framework. The application allows users to create accounts, log in with basic authentication, manage their investment portfolios, view graphs of current stock prices, and perform buy and sell operations for stocks.
 
+![Screenshot](projectimg.png)
+
 ## Summary of the Project
 
 ### Frontend
@@ -25,7 +27,7 @@ This project is an Investment Portfolio website consisting of a frontend built u
 
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/yourusername/investment-portfolio-frontend.git
+   git clone https://github.com/aahad-a/investment-portfolio-frontend.git
    cd investment-portfolio-frontend/investment_portfolio
    ```
 2. **Install dependencies and Run the app**:
@@ -34,3 +36,13 @@ This project is an Investment Portfolio website consisting of a frontend built u
    npm start
    ```
 3. This will start the application at http://localhost:3000.
+
+### Backend
+1. **Clone the repository and run the project**:
+```
+git clone https://github.com/aahad-a/investment-portfolio-backend.git
+cd investment-portfolio-backend
+dotnet build
+dotnet run
+```
+
